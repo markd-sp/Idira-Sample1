@@ -1,0 +1,46 @@
+name: Terraform CyberArk Demo
+
+on:
+  push:
+    branches:
+      - main
+
+# Required to request the OIDC JWT from GitHub
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform-apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Trade the GitHub OIDC token for a Conjur access token
+      - name: Fetch CyberArk Secrets
+        uses: cyberark/conjur-action@v2
+        id: conjur
+        with:
+          url: https://<YOUR_TENANT>.secretsmgr.cyberark.cloud/api
+          account: conjur
+          authn_id: github # The name of the authenticator you created
+          authn_login: host/data/hello-world # Adjust "data" if you placed the workload in a different branch
+          secrets: |
+            idsec_user: secrets/github/client_id
+            idsec_token: secrets/github/client_secret
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      # Run Terraform, injecting the secrets into memory
+      - name: Terraform Plan & Apply
+        run: |
+          terraform plan -out=tfplan
+          terraform apply -auto-approve tfplan
+        env:
+          IDSEC_SERVICE_USER: ${{ steps.conjur.outputs.idsec_user }}
+          IDSEC_SERVICE_TOKEN: ${{ steps.conjur.outputs.idsec_token }}
