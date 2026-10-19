@@ -19,7 +19,7 @@ jobs:
 
       # Trade the GitHub OIDC token for a Conjur access token
       - name: Fetch CyberArk Secrets
-        uses: cyberark/conjur-action@v2
+        uses: cyberark/conjur-action@v3
         id: conjur
         with:
           url: https://<YOUR_TENANT>.secretsmgr.cyberark.cloud/api
