@@ -22,13 +22,12 @@ jobs:
         uses: cyberark/conjur-action@v3.0.1
         id: conjur
         with:
-          url: https://<YOUR_TENANT>.secretsmgr.cyberark.cloud/api
+          url: https://anzdeeks.secretsmgr.cyberark.cloud/api
           account: conjur
           authn_id: github # The name of the authenticator you created
-          authn_login: host/data/hello-world # Adjust "data" if you placed the workload in a different branch
           secrets: |
-            idsec_user: secrets/github/client_id
-            idsec_token: secrets/github/client_secret
+            secrets/github/client_id|IDSEC_SERVICE_USER
+            secrets/github/client_secret|IDSEC_SERVICE_TOKEN
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -41,6 +40,3 @@ jobs:
         run: |
           terraform plan -out=tfplan
           terraform apply -auto-approve tfplan
-        env:
-          IDSEC_SERVICE_USER: ${{ steps.conjur.outputs.idsec_user }}
-          IDSEC_SERVICE_TOKEN: ${{ steps.conjur.outputs.idsec_token }}
