@@ -41,6 +41,7 @@ jobs:
         env:
               IDSEC_SERVICE_USER: ${{ env.IDSEC_SERVICE_USER }}
               IDSEC_SERVICE_TOKEN: ${{ env.IDSEC_SERVICE_TOKEN }}
+              IDENTITY_TENANT_URL: "https://anzdeeks.cyberark.cloud"
         run: |
           terraform plan -out=tfplan
           terraform apply -auto-approve tfplan
