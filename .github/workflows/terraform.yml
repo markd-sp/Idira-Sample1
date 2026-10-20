@@ -39,8 +39,8 @@ jobs:
 # Run Terraform, injecting the secrets into memory
       - name: Terraform Plan & Apply
         env:
-          IDSEC_SERVICE_USER: ${{ steps.conjur.outputs.IDSEC_SERVICE_USER }}
-          IDSEC_SERVICE_TOKEN: ${{ steps.conjur.outputs.IDSEC_SERVICE_TOKEN }}
+              IDSEC_SERVICE_USER: ${{ env.IDSEC_SERVICE_USER }}
+              IDSEC_SERVICE_TOKEN: ${{ env.IDSEC_SERVICE_TOKEN }}
         run: |
           terraform plan -out=tfplan
           terraform apply -auto-approve tfplan
