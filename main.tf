@@ -13,14 +13,13 @@ provider "idsec" {
   auth_method = "identity_service_user"
 }
 
-# Retrieve a specific secret from your "github" Safe
-data "idsec_secret" "demo_secret" {
-  safe_name = "github"
-  name      = "demo-secret-object" # Replace with the name of an actual account in your Safe
+# Retrieve a specific account from your "Github" Safe
+data "idsec_pcloud_account" "demo_account" {
+  safe_name = "Github"
+  name      = "client_id" 
 }
 
-# Output the secret value to the pipeline logs to prove it was retrieved
-output "retrieved_password" {
-  value     = data.idsec_secret.demo_secret.value
-  sensitive = true
+# Output the account name to prove Terraform authenticated and found it
+output "retrieved_account_name" {
+  value = data.idsec_pcloud_account.demo_account.name
 }
