@@ -41,6 +41,7 @@ jobs:
         env:
               IDSEC_SERVICE_USER: ${{ env.IDSEC_SERVICE_USER }}
               IDSEC_SERVICE_TOKEN: ${{ env.IDSEC_SERVICE_TOKEN }}
+              IDSEC_SUBDOMAIN: "anzdeeks"
               TF_LOG: DEBUG
         run: |
           terraform plan -out=tfplan
