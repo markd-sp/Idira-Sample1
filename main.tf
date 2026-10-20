@@ -17,5 +17,4 @@ provider "idsec" {
 resource "idsec_pcloud_safe" "demo_safe" {
   safe_name   = "TF-Demo-Safe-01"
   description = "Created automatically by GitHub Actions"
-  cpm_name    = "PasswordManager" 
 }
