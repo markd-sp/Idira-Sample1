@@ -18,18 +18,24 @@ jobs:
         uses: actions/checkout@v4
 
       # Trade the GitHub OIDC token for a Conjur access token
-      - name: Fetch CyberArk Secrets
+      - name: Fetch CyberArk service user
         uses: cyberark/conjur-action@v3.0.1
-        id: conjur
         with:
           url: https://anzdeeks.secretsmgr.cyberark.cloud/api
           account: conjur
-          authn_id: Github # The name of the authenticator you created
+          authn_id: Github
           host_id: host/data/hello-world
-          secrets: |
-            data/vault/Github/client_id/password|IDSEC_SERVICE_USER
-            data/vault/Github/client_secret/password|IDSEC_SERVICE_TOKEN
+          secrets: data/vault/Github/client_id/password|IDSEC_SERVICE_USER
 
+      - name: Fetch CyberArk service token
+        uses: cyberark/conjur-action@v3.0.1
+        with:
+          url: https://anzdeeks.secretsmgr.cyberark.cloud/api
+          account: conjur
+          authn_id: Github
+          host_id: host/data/hello-world
+          secrets: data/vault/Github/client_secret/password|IDSEC_SERVICE_TOKEN
+          
       # Temporary diagnostic step: remove once login works
       - name: Sanity check secrets
         run: |
