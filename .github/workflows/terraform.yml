@@ -26,9 +26,9 @@ jobs:
           account: conjur
           authn_id: Github # The name of the authenticator you created
           host_id: host/data/hello-world
-          secrets: |
-            secrets/github/client_id|IDSEC_SERVICE_USER
-            secrets/github/client_secret|IDSEC_SERVICE_TOKEN
+        secrets: |
+            data/vault/Github/client_id|IDSEC_SERVICE_USER
+            data/vault/Github/client_secret|IDSEC_SERVICE_TOKEN
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
