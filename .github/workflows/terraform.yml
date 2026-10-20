@@ -35,13 +35,6 @@ jobs:
           authn_id: Github
           host_id: host/data/hello-world
           secrets: data/vault/Github/client_secret/password|IDSEC_SERVICE_TOKEN
-          
-      # Temporary diagnostic step: remove once login works
-      - name: Sanity check secrets
-        run: |
-          echo "user:"; printf %s "$IDSEC_SERVICE_USER" | od -c
-          echo "token length: ${#IDSEC_SERVICE_TOKEN}"
-          echo "token sha256 prefix: $(printf %s "$IDSEC_SERVICE_TOKEN" | sha256sum | cut -c1-6)"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -49,11 +42,8 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      # Run Terraform, injecting the secrets into memory
-      - name: Terraform Plan & Apply
-        env:
-          IDSEC_SERVICE_USER: ${{ env.IDSEC_SERVICE_USER }}
-          IDSEC_SERVICE_TOKEN: ${{ env.IDSEC_SERVICE_TOKEN }}
-          TF_LOG: DEBUG
-        run: |
-          terraform plan -out=tfplan
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
